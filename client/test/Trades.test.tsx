@@ -1,0 +1,82 @@
+import { describe, test, expect, afterEach, vi } from 'vitest'
+import { render, screen, cleanup } from '@testing-library/react'
+import Trades from '../src/components/Trades'
+import { TradesContextProvider } from '../src/contexts/TradesContextProvider'
+import { hydroTrade } from './__mocks__/trades'
+
+describe('Trades', () => {
+    afterEach(() => {
+        cleanup()
+    })
+    test('renders loading message when loading is true', () => {
+        render(
+            <TradesContextProvider
+                value={{
+                    TradesState: { trades: [], loading: true },
+                    TradesDispatch: vi.fn(),
+                }}
+            >
+                <Trades />
+            </TradesContextProvider>
+        )
+
+        const loadingElement = screen.getByText('Loading...')
+        expect(loadingElement).toBeDefined()
+    })
+
+    test('renders "No trades found" message when trades is empty and loading is false', () => {
+        render(
+            <TradesContextProvider
+                value={{
+                    TradesState: { trades: [], loading: false },
+                    TradesDispatch: vi.fn(),
+                }}
+            >
+                <Trades />
+            </TradesContextProvider>
+        )
+
+        const noTradesElement = screen.getByText('No trades found')
+        expect(noTradesElement).toBeDefined()
+    })
+
+    test('renders trades when trades is not empty and loading is false', () => {
+        render(
+            <TradesContextProvider
+                value={{
+                    TradesState: { trades: [hydroTrade], loading: false },
+                    TradesDispatch: vi.fn(),
+                }}
+            >
+                <Trades />
+            </TradesContextProvider>
+        )
+
+        const trade1Element = screen.getByText('12345')
+        expect(trade1Element).toBeDefined()
+    })
+
+    test('renders trade details when trade is clicked', () => {
+        render(
+            <TradesContextProvider
+                value={{
+                    TradesState: { trades: [hydroTrade], loading: false },
+                    TradesDispatch: vi.fn(),
+                }}
+            >
+                <Trades />
+            </TradesContextProvider>
+        )
+
+        const trade1Element = screen.getByText('12345')
+        trade1Element.click()
+
+        vi.waitFor(
+            () => {
+                const tradeDetailsTitle = screen.getByText('Trade Details')
+                expect(tradeDetailsTitle).toBeDefined()
+            },
+            { timeout: 1000 }
+        )
+    })
+})

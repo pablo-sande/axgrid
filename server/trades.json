@@ -1,0 +1,22 @@
+{
+    "trades": [
+        {
+            "id": 1,
+            "status": "CONFIRMED",
+            "energyType": "SOLAR",
+            "price": 1500,
+            "minimumPurchaseQuantity": 10,
+            "contractTerms": "12 months",
+            "paymentMethod": "BANK_TRANSFER",
+            "paymentDate": "2024-04-02",
+            "capacity": {
+                "value": 100,
+                "units": "MW"
+            },
+            "location": "London",
+            "energyOutputPredictions": "LOW",
+            "timeOfAvailability": 6,
+            "certifications": ["ISO 9001"]
+        }
+    ]
+}
