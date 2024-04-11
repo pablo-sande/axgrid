@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useGlobalContext } from '../contexts/GlobalContextProvider'
+import { Trade } from '../types/types'
 
-const useFetchTrades = () => {
+export const useFetchTrades = (): {
+	trades: Trade[] | null
+	loading: boolean
+} => {
 	const { setAlertMessage } = useGlobalContext()!
 	const [trades, setTrades] = useState(null)
 	const [loading, setLoading] = useState(true)
@@ -15,6 +19,7 @@ const useFetchTrades = () => {
 		fetch(`${URL}:${PORT}/trades`, { signal })
 			.then((res) => res.json())
 			.then((data) => {
+				console.log('Trades fetched', data)
 				setTrades(data.trades)
 				setLoading(false)
 			})
@@ -38,5 +43,3 @@ const useFetchTrades = () => {
 
 	return { trades, loading }
 }
-
-export default useFetchTrades

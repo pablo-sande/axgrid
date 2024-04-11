@@ -42,7 +42,7 @@ describe('Trades', () => {
     })
 
     test('renders trade details when trade is clicked', () => {
-        render(
+        const trades = render(
             <TradesContextProvider
                 value={{
                     TradesState: { trades: [hydroTrade] },
@@ -56,12 +56,18 @@ describe('Trades', () => {
         const trade1Element = screen.getByText('12345')
         trade1Element.click()
 
-        vi.waitFor(
-            () => {
-                const tradeDetailsTitle = screen.getByText('Trade Details')
-                expect(tradeDetailsTitle).toBeDefined()
-            },
-            { timeout: 1000 }
+        trades.rerender(
+            <TradesContextProvider
+                value={{
+                    TradesState: { trades: [hydroTrade] },
+                    TradesDispatch: vi.fn(),
+                }}
+            >
+                <Trades />
+            </TradesContextProvider>
         )
+
+        const tradeDetailsTitle = screen.getByText('Trade Details')
+        expect(tradeDetailsTitle).toBeDefined()
     })
 })

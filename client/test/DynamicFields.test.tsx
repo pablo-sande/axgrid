@@ -165,7 +165,7 @@ describe('DynamicFields', () => {
             />
         )
 
-        expect(mockRegister).toHaveBeenCalledWith('test', {})
+        expect(mockRegister).toHaveBeenCalledWith('test', expect.any(Object))
     })
 
     test('calls register with correct arguments for number input with units', () => {
@@ -178,7 +178,107 @@ describe('DynamicFields', () => {
                 label={'Quantity'}
             />
         )
-        expect(mockRegister).toHaveBeenCalledWith('quantity.value', {})
-        expect(mockRegister).toHaveBeenCalledWith('quantity.units', {})
+        expect(mockRegister).toHaveBeenCalledWith(
+            'quantity.value',
+            expect.any(Object)
+        )
+        expect(mockRegister).toHaveBeenCalledWith(
+            'quantity.units',
+            expect.any(Object)
+        )
+    })
+
+    test('calls register with correct arguments for checkbox input', () => {
+        render(
+            <DynamicFields
+                inputType="checkbox"
+                fieldName="regulatoryCompilance"
+                defaultValue={{ finra: true, sec: false }}
+                selectOptions={[
+                    { label: 'FINRA', value: true },
+                    { label: 'SEC', value: false },
+                ]}
+                label={'Regulatory Compilance'}
+            />
+        )
+
+        expect(mockRegister).toHaveBeenCalledWith(
+            'regulatoryCompilance.FINRA',
+            expect.any(Object)
+        )
+        expect(mockRegister).toHaveBeenCalledWith(
+            'regulatoryCompilance.SEC',
+            expect.any(Object)
+        )
+    })
+
+    test('calls register with correct arguments for radio input', () => {
+        render(
+            <DynamicFields
+                inputType="radio"
+                fieldName="flexibilityOfSupply"
+                defaultValue="Yes"
+                radioOptions={[{ value: 'Yes' }, { value: 'No' }]}
+                label={'Flexibility of Supply'}
+            />
+        )
+
+        expect(mockRegister).toHaveBeenCalledWith(
+            'flexibilityOfSupply',
+            expect.any(Object)
+        )
+    })
+
+    test('calls register with correct arguments for select input', () => {
+        render(
+            <DynamicFields
+                inputType="select"
+                fieldName="reservoirLevel"
+                defaultValue="MEDIUM"
+                selectOptions={[
+                    { label: 'Low', value: 'LOW' },
+                    { label: 'Medium', value: 'MEDIUM' },
+                    { label: 'High', value: 'HIGH' },
+                ]}
+                label={'Reservoir Level'}
+            />
+        )
+
+        expect(mockRegister).toHaveBeenCalledWith(
+            'reservoirLevel',
+            expect.any(Object)
+        )
+    })
+
+    test('calls register with correct arguments for date input', () => {
+        render(
+            <DynamicFields
+                inputType="date"
+                fieldName="paymentDate"
+                defaultValue="2022-01-01"
+                label={'Payment Date'}
+            />
+        )
+
+        expect(mockRegister).toHaveBeenCalledWith(
+            'paymentDate',
+            expect.any(Object)
+        )
+    })
+
+    test('calls register with correct arguments for text input', () => {
+        render(
+            <DynamicFields
+                inputType="text"
+                fieldName="location"
+                defaultValue="Madrid"
+                label={'Location'}
+            />
+        )
+
+        expect(mockRegister).toHaveBeenCalledWith(
+            'location',
+            expect.any(Object)
+        )
     })
 })

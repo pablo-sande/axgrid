@@ -1,8 +1,8 @@
 import { DynamicFields } from './DynamicFields'
 import { ErrorMessage } from '@hookform/error-message'
-import { FieldValues, FormProvider, UseFormReturn } from 'react-hook-form'
+import { FormProvider, UseFormReturn } from 'react-hook-form'
 import Button from '@mui/material/Button/Button'
-import { EnergyTypes } from '../../types/types'
+import { DynamicFieldData, EnergyTypes } from '../../types/types'
 import {
     getFormFields,
     validateDynamicFormFields,
@@ -10,9 +10,9 @@ import {
 import { useGlobalContext } from '../../contexts/GlobalContextProvider'
 
 type FormProps = {
-    handleSubmit: any
+    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
     typeSelected: EnergyTypes
-    formMethods: UseFormReturn<FieldValues, any, undefined>
+    formMethods: UseFormReturn<DynamicFieldData>
     closeForm: (close: boolean) => void
 }
 
@@ -51,10 +51,18 @@ export const Form = ({
                     >
                         <DynamicFields {...field} />
 
-                        <ErrorMessage
-                            errors={formMethods.formState.errors}
-                            name={field.fieldName || field.label}
-                        />
+                        <div className="text-red-500">
+                            <ErrorMessage
+                                errors={formMethods.formState.errors}
+                                name={
+                                    (field.units &&
+                                        field.units.length &&
+                                        field.fieldName + '.value') ||
+                                    field.fieldName ||
+                                    field.label
+                                }
+                            />
+                        </div>
                     </div>
                 ))}
             </FormProvider>

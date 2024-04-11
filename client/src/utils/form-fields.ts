@@ -3,10 +3,13 @@ import {
 	EnergyTypes,
 	mandatoryFields,
 	validateDynamicFormFieldsObj,
+	DynamicFieldData,
 } from '../types/types.ts'
 import { data } from '../data/data.ts'
 
-export const getFormFields = (energyType: EnergyTypes) => {
+export const getFormFields = (
+	energyType: EnergyTypes
+): DynamicFieldData[] | null => {
 	if (
 		!(
 			data &&

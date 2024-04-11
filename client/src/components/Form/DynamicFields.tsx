@@ -49,7 +49,10 @@ export const DynamicFields = ({
                 <TextField
                     label={label}
                     type={inputType}
-                    {...register(fieldName, config)}
+                    {...register(fieldName, {
+                        ...config,
+                        required: label + ' is required',
+                    })}
                     defaultValue={defaultValue}
                     className="bg-white"
                 />

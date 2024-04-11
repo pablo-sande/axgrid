@@ -3,7 +3,7 @@ import TradesContext, {
     TradesReducer,
     defaultTradesContextState,
 } from './TradesContextProvider'
-import useFetchTrades from '../hooks/useFetchTrades'
+import { useFetchTrades } from '../hooks/useFetchTrades'
 import useHandleSocket from '../hooks/useHandleSocket'
 import { useInitializeTrades } from '../hooks/useInitializeTrades'
 

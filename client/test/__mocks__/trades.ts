@@ -32,18 +32,17 @@ export const solarTrade: Trade = {
 	contractTerms: '24 months',
 	paymentMethod: 'CREDIT_CARD',
 	paymentDate: '2024-04-02',
-	flexibilityOfSupply: 'No',
-	energyStorage: 'Yes',
-	waterFlowRate: 'HIGH',
+	timeOfAvailability: {
+		value: 4,
+		units: 'd/w',
+	},
 	capacity: {
 		value: 200,
 		units: 'MW',
 	},
-	reservoirLevel: 'HIGH',
-	regulatoryCompilance: {
-		FINRA: false,
-		SEC: true,
-	},
+	energyOutputPredictions: 'HIGH',
+	certifications: 'ISO 9001',
+	location: 'Zurich',
 }
 
 export const windTrade: Trade = {
@@ -51,22 +50,23 @@ export const windTrade: Trade = {
 	status: 'CANCELED',
 	energyType: 'WIND',
 	price: 2500,
+	energyOutputPredictions: 'MEDIUM',
+	turbineEfficiencty: 'MEDIUM',
 	minimumPurchaseQuantity: 30,
 	contractTerms: '36 months',
 	paymentMethod: 'PAYPAL',
 	paymentDate: '2024-04-02',
-	flexibilityOfSupply: 'Yes',
-	energyStorage: 'Yes',
-	waterFlowRate: 'MEDIUM',
+	windSpeedPredicions: 'HIGH',
+	certifications: 'ISO 14001',
+	timeOfAvailability: {
+		value: 12,
+		units: 'h/d',
+	},
 	capacity: {
 		value: 300,
 		units: 'MW',
 	},
-	reservoirLevel: 'MEDIUM',
-	regulatoryCompilance: {
-		FINRA: true,
-		SEC: true,
-	},
+	location: 'Texas',
 }
 
 export const kineticTrade: Trade = {

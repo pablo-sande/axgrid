@@ -90,6 +90,11 @@ export type LengthWithUnits = {
   units: "months" | "years"
 }
 
+export type TimeOfAvailability = {
+  value: number
+  units: "h/d" | "d/w"
+}
+
 type EnergyConversionEfficiency = "LOW" | "MEDIUM" | "HIGH";
 type PredictabilityOfSource = "LOW" | "MEDIUM" | "HIGH";
 type WindSpeedPredictions = "LOW" | "MEDIUM" | "HIGH";
@@ -101,8 +106,8 @@ export interface SolarEnergy extends EnergySource {
   capacity: NumberWithUnits;
   location: string;
   energyOutputPredictions: EnergyOutputPredictions // radiobutton
-  timeOfAvailability: number
-  certifications: string[]
+  timeOfAvailability: TimeOfAvailability;
+  certifications: string;
 }
 
 export interface HydroEnergy extends EnergySource {
@@ -133,8 +138,8 @@ export interface WindEnergy extends EnergySource {
     location: string;
     windSpeedPredicions: WindSpeedPredictions; 
     turbineEfficiencty: TurbineEfficiency; 
-    timeOfAvailability: number;
-    certifications: string[];
+    timeOfAvailability: TimeOfAvailability;
+    certifications: string;
 }
 
 export interface ThermalEnergy extends EnergySource {

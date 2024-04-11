@@ -1,4 +1,4 @@
-import { renderHook, act, cleanup } from '@testing-library/react'
+import { renderHook, act, cleanup, waitFor } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
 import useTradeApi from '../src/hooks/useApi'
 import { kineticTrade } from './__mocks__/trades'
@@ -37,19 +37,16 @@ describe('useTradeApi', () => {
 		expect(result.current.returnData).toBe(null)
 		expect(result.current.error).toBe(null)
 
-		act(() => {
-			result.current.makeRequest(kineticTrade)
-		})
+		await result.current.makeRequest(kineticTrade)
 
 		expect(result.current.loading).toBe(true)
 
-		vi.waitFor(
-			() => {
-				expect(result.current.returnData).toEqual(kineticTrade)
-				expect(result.current.error).toBe(null)
-			},
-			{ timeout: 1000 }
-		)
+		await waitFor(() => {
+			expect(result.current.returnData).toEqual({
+				trades: [kineticTrade],
+			})
+			expect(result.current.error).toBe(null)
+		})
 	})
 
 	test('should handle API request error', async () => {
@@ -69,13 +66,10 @@ describe('useTradeApi', () => {
 
 		expect(result.current.loading).toBe(true)
 
-		vi.waitFor(
-			() => {
-				expect(result.current.loading).toBe(false)
-				expect(result.current.returnData).toBe(null)
-				expect(result.current.error).toEqual(mockError)
-			},
-			{ timeout: 1000 }
-		)
+		await waitFor(() => {
+			expect(result.current.loading).toBe(false)
+			expect(result.current.returnData).toBe(null)
+			expect(result.current.error).toEqual(mockError)
+		})
 	})
 })

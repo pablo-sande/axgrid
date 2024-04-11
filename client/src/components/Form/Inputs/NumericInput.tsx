@@ -31,7 +31,14 @@ export const NumericInput = ({
                     {...register(
                         (units && units.length && `${fieldName}.value`) ||
                             fieldName,
-                        config
+                        {
+                            ...config,
+                            required: label + ' is required',
+                            min: {
+                                value: 1,
+                                message: label + ' needs to be greater than 0',
+                            },
+                        }
                     )}
                     defaultValue={defaultValue}
                     className="bg-white w-full"

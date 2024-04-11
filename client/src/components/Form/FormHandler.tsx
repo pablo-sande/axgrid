@@ -1,5 +1,5 @@
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { EnergyTypes, Trade } from '../../types/types.ts'
+import { DynamicFieldData, EnergyTypes, Trade } from '../../types/types.ts'
 import { Button, Dialog } from '@mui/material'
 import { useId, useState } from 'react'
 import EnergyTypeSelector from '../EnergyTypeSelector.tsx'
@@ -15,11 +15,11 @@ export const FormHandler = ({ closeForm }: FormProps) => {
     const { setAlertMessage } = useGlobalContext()
     const API_URL = import.meta.env.VITE_API_URL
     const API_PORT = import.meta.env.VITE_API_PORT
-    const { makeRequest, error: returnError } = useTradeApi({
+    const { makeRequest, error } = useTradeApi({
         url: `${API_URL}:${API_PORT}/trades/add`,
         method: 'POST',
     })
-    const formMethods = useForm()
+    const formMethods = useForm<DynamicFieldData>()
     const { handleSubmit } = formMethods
     const id = useId()
 
@@ -30,9 +30,13 @@ export const FormHandler = ({ closeForm }: FormProps) => {
 
         await makeRequest(data)
 
-        if (returnError) {
-            console.error('Error submitting form', returnError)
-            alert('Error submitting form')
+        if (error) {
+            console.error('Error submitting form', error)
+            setAlertMessage({
+                message: 'Error submitting form',
+                severity: 'error',
+                isOpen: true,
+            })
         }
 
         setAlertMessage({

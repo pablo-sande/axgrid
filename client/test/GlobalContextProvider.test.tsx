@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import {
     GlobalContextProvider,
     useGlobalContext,
@@ -54,21 +54,21 @@ describe('GlobalContextProvider', () => {
             return null
         }
 
-        render(
+        const context = render(
             <GlobalContextProvider>
                 <TestComponent />
             </GlobalContextProvider>
         )
 
-        const newSocket = {} as any
+        const newSocket = { foo: 'foo' } as any
         contextValue?.setSocket(newSocket)
-
-        vi.waitFor(
-            () => {
-                expect(contextValue?.socket).toBe(newSocket)
-            },
-            { timeout: 1000 }
+        context.rerender(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
         )
+
+        expect(contextValue?.socket).toBe(newSocket)
     })
 
     test('updates the alertMessage value correctly', () => {
@@ -79,7 +79,7 @@ describe('GlobalContextProvider', () => {
             return null
         }
 
-        render(
+        const context = render(
             <GlobalContextProvider>
                 <TestComponent />
             </GlobalContextProvider>
@@ -91,13 +91,13 @@ describe('GlobalContextProvider', () => {
             isOpen: true,
         }
         contextValue?.setAlertMessage(newAlertMessage)
-
-        vi.waitFor(
-            () => {
-                expect(contextValue?.alertMessage).toEqual(newAlertMessage)
-            },
-            { timeout: 1000 }
+        context.rerender(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
         )
+
+        expect(contextValue?.alertMessage).toEqual(newAlertMessage)
     })
 
     test('updates the sidenavExpanded value correctly', () => {
@@ -108,7 +108,7 @@ describe('GlobalContextProvider', () => {
             return null
         }
 
-        render(
+        const context = render(
             <GlobalContextProvider>
                 <TestComponent />
             </GlobalContextProvider>
@@ -116,11 +116,11 @@ describe('GlobalContextProvider', () => {
 
         contextValue?.setSidenavExpanded(true)
 
-        vi.waitFor(
-            () => {
-                expect(contextValue?.sidenavExpanded).toBe(true)
-            },
-            { timeout: 1000 }
+        context.rerender(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
         )
+        expect(contextValue?.sidenavExpanded).toBe(true)
     })
 })
