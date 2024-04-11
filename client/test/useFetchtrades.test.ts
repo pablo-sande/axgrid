@@ -1,4 +1,4 @@
-import { renderHook, act, cleanup, waitFor } from '@testing-library/react'
+import { renderHook, waitFor } from '@testing-library/react'
 import { useFetchTrades } from '../src/hooks/useFetchTrades'
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest'
 import { gasTrade } from './__mocks__/trades'

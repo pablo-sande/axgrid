@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
-import { test, expect, describe, afterEach, vi } from 'vitest'
+import { test, expect, describe, afterEach } from 'vitest'
 import { BrowserRouter } from 'react-router-dom'
 import SideNav from '../src/components/SideNav'
 import { GlobalContextProvider } from '../src/contexts/GlobalContextProvider'
