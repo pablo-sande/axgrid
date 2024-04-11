@@ -1,6 +1,6 @@
 import { describe, test, expect, afterEach, vi } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
-import Trades from '../src/components/Trades'
+import { Trades } from '../src/components/Trades'
 import { TradesContextProvider } from '../src/contexts/TradesContextProvider'
 import { hydroTrade } from './__mocks__/trades'
 
@@ -8,27 +8,12 @@ describe('Trades', () => {
     afterEach(() => {
         cleanup()
     })
-    test('renders loading message when loading is true', () => {
+
+    test('renders "No trades found" message when trades is empty', () => {
         render(
             <TradesContextProvider
                 value={{
-                    TradesState: { trades: [], loading: true },
-                    TradesDispatch: vi.fn(),
-                }}
-            >
-                <Trades />
-            </TradesContextProvider>
-        )
-
-        const loadingElement = screen.getByText('Loading...')
-        expect(loadingElement).toBeDefined()
-    })
-
-    test('renders "No trades found" message when trades is empty and loading is false', () => {
-        render(
-            <TradesContextProvider
-                value={{
-                    TradesState: { trades: [], loading: false },
+                    TradesState: { trades: [] },
                     TradesDispatch: vi.fn(),
                 }}
             >
@@ -40,11 +25,11 @@ describe('Trades', () => {
         expect(noTradesElement).toBeDefined()
     })
 
-    test('renders trades when trades is not empty and loading is false', () => {
+    test('renders trades when trades is not empty', () => {
         render(
             <TradesContextProvider
                 value={{
-                    TradesState: { trades: [hydroTrade], loading: false },
+                    TradesState: { trades: [hydroTrade] },
                     TradesDispatch: vi.fn(),
                 }}
             >
@@ -60,7 +45,7 @@ describe('Trades', () => {
         render(
             <TradesContextProvider
                 value={{
-                    TradesState: { trades: [hydroTrade], loading: false },
+                    TradesState: { trades: [hydroTrade] },
                     TradesDispatch: vi.fn(),
                 }}
             >

@@ -1,38 +1,62 @@
-// This is a really cheap SideNav that I made so I could
-// invest more time in the core features of the app
-// It's not responsive and it's not using any state management
+import { NavLink } from 'react-router-dom'
+import { useGlobalContext } from '../contexts/GlobalContextProvider'
+import AxpoLogo from './AxpoLogo'
+import StorefrontIcon from '@mui/icons-material/Storefront'
+import SellIcon from '@mui/icons-material/Sell'
+
 const SideNav = () => {
+    const { sidenavExpanded, setSidenavExpanded } = useGlobalContext()
+
     return (
-        <div>
-            <div className="flex flex-col w-64 h-full bg-gray-800">
-                <div className="flex items-center justify-center h-14 border-b border-gray-700">
-                    <h1 className="text-2xl font-semibold text-white">
-                        AxGrid
-                    </h1>
-                </div>
-                <nav className="flex flex-col p-4">
-                    <a
-                        href="/"
-                        className={`flex items-center space-x-2 px-4 py-2 text-gray-300 rounded-md ${
-                            window.location.pathname === '/'
-                                ? 'bg-gray-700'
-                                : ''
-                        }`}
-                    >
-                        <span className="text-lg">Vendors</span>
-                    </a>
-                    <a
-                        href="/customers"
-                        className={`flex items-center space-x-2 px-4 py-2 text-gray-300 rounded-md ${
-                            window.location.pathname === '/customers'
-                                ? 'bg-gray-700'
-                                : ''
-                        }`}
-                    >
-                        <span className="text-lg">Customers</span>
-                    </a>
-                </nav>
+        <div
+            data-testid="side-nav"
+            className={`flex flex-col h-full bg-gray-800 transition-all ${
+                sidenavExpanded ? 'w-64' : 'w-14'
+            }`}
+        >
+            <div className="flex flex-row w-full items-center h-14 border-b border-gray-700 px-2">
+                <button
+                    onClick={() => setSidenavExpanded(!sidenavExpanded)}
+                    className="absolute left-3 text-white w-8 flex items-center transition-all hover:rotate-45 justify-start"
+                >
+                    <AxpoLogo />
+                </button>
+                <h1
+                    className={`flex pl-12 align-center text-2xl font-semibold w-20 text-white`}
+                >
+                    {sidenavExpanded ? 'AxGrid' : ''}
+                </h1>
             </div>
+            <nav className="flex flex-col p-2 ">
+                <NavLink
+                    to="/"
+                    data-testid="vendors-link"
+                    className={({ isActive }) =>
+                        `flex items-center space-x-2 p-2 h-12 text-gray-300 rounded-md ${
+                            isActive ? 'bg-gray-700' : ''
+                        }`
+                    }
+                >
+                    <SellIcon />
+                    {sidenavExpanded && (
+                        <span className="text-lg">Vendors</span>
+                    )}
+                </NavLink>
+                <NavLink
+                    to="/customers"
+                    data-testid="customers-link"
+                    className={({ isActive }) =>
+                        `flex items-center space-x-2 p-2 h-12 text-gray-300 rounded-md ${
+                            isActive ? 'bg-gray-700' : ''
+                        }`
+                    }
+                >
+                    <StorefrontIcon />
+                    {sidenavExpanded && (
+                        <span className="text-lg">Customers</span>
+                    )}
+                </NavLink>
+            </nav>
         </div>
     )
 }

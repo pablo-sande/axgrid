@@ -5,7 +5,7 @@ import {
     screen,
 } from '@testing-library/react'
 import { describe, test, expect, vi, afterEach } from 'vitest'
-import { DynamicFields } from '../src/components/DynamicFields'
+import { DynamicFields } from '../src/components/Form'
 
 const mockRegister = vi.fn().mockImplementation((name) => ({ name: name }))
 

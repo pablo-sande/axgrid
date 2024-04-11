@@ -16,7 +16,6 @@ describe('TradesContextProvider', () => {
                 value={{
                     TradesState: {
                         trades: [],
-                        loading: false,
                     },
                     TradesDispatch: function (): void {
                         throw new Error('Function not implemented.')

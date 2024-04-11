@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest'
-import TradeDetails from '../src/components/TradeDetails'
-import { camelCaseToSeparatedWords } from '../src/utils/stringUtils'
+import { TradeDetails } from '../src/components/Trades'
+import { camelCaseToSeparatedWords } from '../src/utils/string-utils'
 import { TradeStatus } from '../src/types/types'
 import { hydroTrade } from './__mocks__/trades'
 
@@ -112,8 +112,22 @@ describe('TradeDetails component', () => {
                 />
             )
             const acceptButton = screen.queryByText('Accept Trade')
-            expect(acceptButton).toBeNull()
+            expect(acceptButton?.classList).toContain('Mui-disabled')
         }
+        cleanup()
+        render(
+            <TradeDetails
+                tradeDetails={{
+                    ...hydroTrade,
+                    status: 'CONFIRMED',
+                }}
+                setTradeDetails={setTradeDetails}
+                acceptTrade={acceptTrade}
+                cancelTrade={cancelTrade}
+            />
+        )
+        const acceptButton = screen.queryByText('Accept Trade')
+        expect(acceptButton?.classList).not.toContain('Mui-disabled')
     })
 
     test('only shows the Cancel Trade button if trade status is not DELIVERED or CANCELED', () => {
@@ -131,7 +145,23 @@ describe('TradeDetails component', () => {
                 />
             )
             const cancelButton = screen.queryByText('Cancel Trade')
-            expect(cancelButton).toBeNull()
+            expect(cancelButton?.classList).toContain('Mui-disabled')
+        }
+        for (const status of ['PENDING', 'EXECUTED', 'CONFIRMED']) {
+            cleanup()
+            render(
+                <TradeDetails
+                    tradeDetails={{
+                        ...hydroTrade,
+                        status: status as TradeStatus,
+                    }}
+                    setTradeDetails={setTradeDetails}
+                    acceptTrade={acceptTrade}
+                    cancelTrade={cancelTrade}
+                />
+            )
+            const cancelButton = screen.queryByText('Cancel Trade')
+            expect(cancelButton?.classList).not.toContain('Mui-disabled')
         }
     })
 })

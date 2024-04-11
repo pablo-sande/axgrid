@@ -41,6 +41,8 @@ describe('GlobalContextProvider', () => {
                 isOpen: false,
             },
             setAlertMessage: expect.any(Function),
+            sidenavExpanded: false,
+            setSidenavExpanded: expect.any(Function),
         })
     })
 
@@ -93,6 +95,30 @@ describe('GlobalContextProvider', () => {
         vi.waitFor(
             () => {
                 expect(contextValue?.alertMessage).toEqual(newAlertMessage)
+            },
+            { timeout: 1000 }
+        )
+    })
+
+    test('updates the sidenavExpanded value correctly', () => {
+        let contextValue: ReturnType<typeof useGlobalContext> | undefined
+
+        const TestComponent = () => {
+            contextValue = useGlobalContext()
+            return null
+        }
+
+        render(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
+        )
+
+        contextValue?.setSidenavExpanded(true)
+
+        vi.waitFor(
+            () => {
+                expect(contextValue?.sidenavExpanded).toBe(true)
             },
             { timeout: 1000 }
         )

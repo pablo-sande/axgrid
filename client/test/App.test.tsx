@@ -1,5 +1,5 @@
-import { describe, test, expect, vi, afterEach } from 'vitest'
-import { render, cleanup } from '@testing-library/react'
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, cleanup, screen, act } from '@testing-library/react'
 import App from '../src/App'
 import io from 'socket.io-client'
 
@@ -11,6 +11,10 @@ vi.mock('socket.io-client', async (importOriginal) => {
 })
 
 describe('App component', () => {
+    beforeEach(() => {
+        vi.restoreAllMocks()
+    })
+
     afterEach(() => {
         cleanup()
     })
@@ -31,5 +35,30 @@ describe('App component', () => {
         const { unmount } = render(<App />)
         unmount()
         expect(mockSocket.disconnect).toHaveBeenCalled()
+    })
+
+    test('shows loading when the socket is not connected', () => {
+        render(<App />)
+        expect(screen.getByText('Connecting to socket...')).toBeDefined()
+    })
+
+    test('shows error message when socket connection fails', () => {
+        vi.useFakeTimers()
+        render(<App />)
+
+        expect(screen.queryByText('Connection to socket failed.')).toBeNull()
+
+        act(() => {
+            vi.advanceTimersByTime(5000)
+        })
+
+        expect(screen.getByText('Connection to socket failed.')).toBeDefined()
+    })
+
+    test('renders the content when the socket is connected', async () => {
+        const mockUseSocket = await import('../src/hooks/useSocket')
+        mockUseSocket.default = () => true
+        render(<App />)
+        expect(screen.getByText('Click to create a new Trade')).toBeDefined()
     })
 })

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FormHandler } from './FormHandler.tsx'
+import { FormHandler } from './Form'
 import AxpoLogo from './AxpoLogo.tsx'
 
 const ClickToCreateTrade = () => {

@@ -1,11 +1,11 @@
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { EnergyTypes, Trade } from '../types/types.ts'
+import { EnergyTypes, Trade } from '../../types/types.ts'
 import { Button, Dialog } from '@mui/material'
-import { useState } from 'react'
-import EnergyTypeSelector from './EnergyTypeSelector.tsx'
-import useTradeApi from '../hooks/useApi.ts'
-import Form from './Form.tsx'
-import { useGlobalContext } from '../contexts/GlobalContextProvider.tsx'
+import { useId, useState } from 'react'
+import EnergyTypeSelector from '../EnergyTypeSelector.tsx'
+import useTradeApi from '../../hooks/useApi.ts'
+import { Form } from './Form'
+import { useGlobalContext } from '../../contexts/GlobalContextProvider.tsx'
 
 type FormProps = {
     closeForm: (close: boolean) => void
@@ -13,15 +13,18 @@ type FormProps = {
 export const FormHandler = ({ closeForm }: FormProps) => {
     const [typeSelected, setTypeSelected] = useState<EnergyTypes>(null)
     const { setAlertMessage } = useGlobalContext()
+    const API_URL = import.meta.env.VITE_API_URL
+    const API_PORT = import.meta.env.VITE_API_PORT
     const { makeRequest, error: returnError } = useTradeApi({
-        url: 'http://localhost:4000/trades/add',
+        url: `${API_URL}:${API_PORT}/trades/add`,
         method: 'POST',
     })
     const formMethods = useForm()
     const { handleSubmit } = formMethods
+    const id = useId()
 
     const submitFunction = async (data: Trade) => {
-        data.id = new Date().getTime()
+        data.id = id
         data.energyType = typeSelected
         data.status = 'PENDING'
 

@@ -1,10 +1,12 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
-import TradesContextComponent from '../src/contexts/TradesContextComponent'
 import { windTrade } from './__mocks__/trades'
-import Trades from '../src/components/Trades'
+import { Trades } from '../src/components/Trades'
+import { TradesContextComponent } from '../src/contexts/TradesContextComponent'
 
 global.fetch = vi.fn()
+const API_URL = import.meta.env.VITE_API_URL
+const API_PORT = import.meta.env.VITE_API_PORT
 
 describe('TradesContextComponent', () => {
     const createFetchResponse = (data: any) => {
@@ -32,7 +34,7 @@ describe('TradesContextComponent', () => {
         render(<TradesContextComponent />)
 
         expect(fetch).toHaveBeenCalledWith(
-            'http://localhost:4000/trades',
+            `${API_URL}:${API_PORT}/trades`,
             expect.any(Object)
         )
     })

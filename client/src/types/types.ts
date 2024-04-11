@@ -1,6 +1,6 @@
 import { RegisterOptions } from "react-hook-form";
 
-export type ControlType = "text" | "select" | "number" | "checkbox" | "date" | "radio";
+export type InputType = "text" | "select" | "number" | "checkbox" | "date" | "radio";
 
 export type SelectOption = {
   label: string;
@@ -17,7 +17,7 @@ export type RadioOption = {
 
 export interface DynamicFieldData {
   label: string;
-  inputType: ControlType;
+  inputType: InputType;
   fieldName: string;
   defaultValue: any;
   selectOptions?: SelectOption[] 
@@ -61,7 +61,7 @@ export type Trade = EnergySource & (SolarEnergy | HydroEnergy | KineticEnergy | 
 export type TradeStatus =  "EXECUTED" | "CANCELED" | "PENDING" | "CONFIRMED" | "DELIVERED";
 
 interface EnergySource {
-  id: number;
+  id: string;
   status: TradeStatus;
   energyType: EnergyTypes;
   price: number;
@@ -151,4 +151,3 @@ export type AlertMessageType = {
   severity: "error" | "warning" | "info" | "success";
   isOpen: boolean;
 }
-

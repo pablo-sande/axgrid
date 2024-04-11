@@ -1,11 +1,10 @@
 import React, { createContext } from 'react'
 import { Trade } from '../types/types'
 
-export type TradesContextState = { trades: Trade[]; loading?: boolean }
+export type TradesContextState = { trades: Trade[] }
 
 export const defaultTradesContextState: TradesContextState = {
     trades: [] as Trade[],
-    loading: true,
 }
 
 export type TradesContextActionsTypes =
@@ -27,17 +26,15 @@ export const TradesReducer = (
 ) => {
     switch (action.type) {
         case 'SET_TRADES':
-            return { trades: action.payload as Trade[], loading: false }
+            return { trades: action.payload as Trade[] }
         case 'ADD_TRADE':
             return {
                 ...state,
-                loading: false,
                 trades: [...state.trades, action.payload as Trade],
             }
         case 'CHANGE_TRADE_STATUS':
             return {
                 ...state,
-                loading: false,
                 trades: state.trades.map((trade) => {
                     if (trade.id === (action.payload as Trade).id) {
                         return {
@@ -51,7 +48,6 @@ export const TradesReducer = (
         case 'REMOVE_TRADE':
             return {
                 ...state,
-                loading: false,
                 trades: state.trades.filter(
                     (trade) => trade.id !== (action.payload as Trade).id
                 ),

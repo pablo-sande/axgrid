@@ -2,12 +2,12 @@ import { DynamicFields } from './DynamicFields'
 import { ErrorMessage } from '@hookform/error-message'
 import { FieldValues, FormProvider, UseFormReturn } from 'react-hook-form'
 import Button from '@mui/material/Button/Button'
-import { EnergyTypes } from '../types/types'
+import { EnergyTypes } from '../../types/types'
 import {
     getFormFields,
     validateDynamicFormFields,
-} from '../utils/getFormFields'
-import { useGlobalContext } from '../contexts/GlobalContextProvider'
+} from '../../utils/form-fields'
+import { useGlobalContext } from '../../contexts/GlobalContextProvider'
 
 type FormProps = {
     handleSubmit: any
@@ -16,7 +16,7 @@ type FormProps = {
     closeForm: (close: boolean) => void
 }
 
-const Form = ({
+export const Form = ({
     handleSubmit,
     typeSelected,
     formMethods,
@@ -79,5 +79,3 @@ const Form = ({
         </form>
     )
 }
-
-export default Form

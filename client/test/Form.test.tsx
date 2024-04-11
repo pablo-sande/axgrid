@@ -1,8 +1,8 @@
 import { render, screen, cleanup, fireEvent } from '@testing-library/react'
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest'
 import { useForm } from 'react-hook-form'
-import Form from '../src/components/Form'
-import { getFormFields } from '../src/utils/getFormFields'
+import { Form } from '../src/components/Form'
+import { getFormFields } from '../src/utils/form-fields'
 import { energyTypes } from '../src/types/types'
 
 describe('Form component', () => {

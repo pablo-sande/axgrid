@@ -2,43 +2,24 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Vendors from './pages/Vendors'
 import Customers from './pages/Customers'
-import { useEffect } from 'react'
-import { io } from 'socket.io-client'
 import SideNav from './components/SideNav'
 import AlertMessage from './components/AlertMessage'
 import { useGlobalContext } from './contexts/GlobalContextProvider'
+import useSocket from './hooks/useSocket'
+import { useState } from 'react'
 
 function App() {
-    const { setSocket, alertMessage, setAlertMessage } = useGlobalContext()
+    const { alertMessage, setAlertMessage } = useGlobalContext()
+    const [errorConnecting, setErrorConnecting] = useState(false)
+    const isConnected = useSocket()
 
-    useEffect(() => {
-        const newSocket = io('http://localhost:3000', {
-            transports: ['websocket', 'polling'],
-        })
-
-        function onConnect() {
-            console.log('connected')
-            setSocket(newSocket)
-        }
-
-        function onDisconnect() {
-            console.log('disconnected')
-            setSocket(null)
-        }
-
-        newSocket.connect()
-
-        newSocket.on('connect', onConnect)
-        newSocket.on('disconnect', onDisconnect)
-
-        return () => {
-            newSocket.disconnect()
-        }
-    }, [])
+    setTimeout(() => {
+        setErrorConnecting(!isConnected)
+    }, 5000)
 
     return (
-        <>
-            <main className="flex relative w-full h-full">
+        <main className="flex relative w-full h-full">
+            {isConnected ? (
                 <Router>
                     <div className="flex relative w-full h-full">
                         <SideNav />
@@ -54,8 +35,12 @@ function App() {
                         />
                     </div>
                 </Router>
-            </main>
-        </>
+            ) : errorConnecting ? (
+                <p className="relative m-auto">Connection to socket failed.</p>
+            ) : (
+                <p className="relative m-auto">Connecting to socket...</p>
+            )}
+        </main>
     )
 }
 
