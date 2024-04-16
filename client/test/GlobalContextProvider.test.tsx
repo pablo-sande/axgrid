@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import {
     GlobalContextProvider,
     useGlobalContext,
@@ -41,6 +41,8 @@ describe('GlobalContextProvider', () => {
                 isOpen: false,
             },
             setAlertMessage: expect.any(Function),
+            sidenavExpanded: false,
+            setSidenavExpanded: expect.any(Function),
         })
     })
 
@@ -52,21 +54,21 @@ describe('GlobalContextProvider', () => {
             return null
         }
 
-        render(
+        const context = render(
             <GlobalContextProvider>
                 <TestComponent />
             </GlobalContextProvider>
         )
 
-        const newSocket = {} as any
+        const newSocket = { foo: 'foo' } as any
         contextValue?.setSocket(newSocket)
-
-        vi.waitFor(
-            () => {
-                expect(contextValue?.socket).toBe(newSocket)
-            },
-            { timeout: 1000 }
+        context.rerender(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
         )
+
+        expect(contextValue?.socket).toBe(newSocket)
     })
 
     test('updates the alertMessage value correctly', () => {
@@ -77,7 +79,7 @@ describe('GlobalContextProvider', () => {
             return null
         }
 
-        render(
+        const context = render(
             <GlobalContextProvider>
                 <TestComponent />
             </GlobalContextProvider>
@@ -89,12 +91,36 @@ describe('GlobalContextProvider', () => {
             isOpen: true,
         }
         contextValue?.setAlertMessage(newAlertMessage)
-
-        vi.waitFor(
-            () => {
-                expect(contextValue?.alertMessage).toEqual(newAlertMessage)
-            },
-            { timeout: 1000 }
+        context.rerender(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
         )
+
+        expect(contextValue?.alertMessage).toEqual(newAlertMessage)
+    })
+
+    test('updates the sidenavExpanded value correctly', () => {
+        let contextValue: ReturnType<typeof useGlobalContext> | undefined
+
+        const TestComponent = () => {
+            contextValue = useGlobalContext()
+            return null
+        }
+
+        const context = render(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
+        )
+
+        contextValue?.setSidenavExpanded(true)
+
+        context.rerender(
+            <GlobalContextProvider>
+                <TestComponent />
+            </GlobalContextProvider>
+        )
+        expect(contextValue?.sidenavExpanded).toBe(true)
     })
 })

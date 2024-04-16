@@ -1,6 +1,6 @@
 import { RegisterOptions } from "react-hook-form";
 
-export type ControlType = "text" | "select" | "number" | "checkbox" | "date" | "radio";
+export type InputType = "text" | "select" | "number" | "checkbox" | "date" | "radio";
 
 export type SelectOption = {
   label: string;
@@ -17,7 +17,7 @@ export type RadioOption = {
 
 export interface DynamicFieldData {
   label: string;
-  inputType: ControlType;
+  inputType: InputType;
   fieldName: string;
   defaultValue: any;
   selectOptions?: SelectOption[] 
@@ -61,7 +61,7 @@ export type Trade = EnergySource & (SolarEnergy | HydroEnergy | KineticEnergy | 
 export type TradeStatus =  "EXECUTED" | "CANCELED" | "PENDING" | "CONFIRMED" | "DELIVERED";
 
 interface EnergySource {
-  id: number;
+  id: string;
   status: TradeStatus;
   energyType: EnergyTypes;
   price: number;
@@ -90,6 +90,11 @@ export type LengthWithUnits = {
   units: "months" | "years"
 }
 
+export type TimeOfAvailability = {
+  value: number
+  units: "h/d" | "d/w"
+}
+
 type EnergyConversionEfficiency = "LOW" | "MEDIUM" | "HIGH";
 type PredictabilityOfSource = "LOW" | "MEDIUM" | "HIGH";
 type WindSpeedPredictions = "LOW" | "MEDIUM" | "HIGH";
@@ -101,8 +106,8 @@ export interface SolarEnergy extends EnergySource {
   capacity: NumberWithUnits;
   location: string;
   energyOutputPredictions: EnergyOutputPredictions // radiobutton
-  timeOfAvailability: number
-  certifications: string[]
+  timeOfAvailability: TimeOfAvailability;
+  certifications: string;
 }
 
 export interface HydroEnergy extends EnergySource {
@@ -133,8 +138,8 @@ export interface WindEnergy extends EnergySource {
     location: string;
     windSpeedPredicions: WindSpeedPredictions; 
     turbineEfficiencty: TurbineEfficiency; 
-    timeOfAvailability: number;
-    certifications: string[];
+    timeOfAvailability: TimeOfAvailability;
+    certifications: string;
 }
 
 export interface ThermalEnergy extends EnergySource {
@@ -151,4 +156,3 @@ export type AlertMessageType = {
   severity: "error" | "warning" | "info" | "success";
   isOpen: boolean;
 }
-

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
-import { FormHandler } from '../src/components/FormHandler'
+import { FormHandler } from '../src/components/Form'
 import { describe, test, expect, afterEach, vi } from 'vitest'
 import { useState as useStateMock } from 'react'
 import { EnergyTypes } from '../src/types/types'
@@ -48,19 +48,4 @@ describe('Form component', () => {
         fireEvent.click(cancelButton)
         expect(closeForm).toHaveBeenCalledWith(true)
     })
-
-    // test('calls onSubmit when form is submitted', () => {
-    //     vi.mocked(useStateMock).mockImplementationOnce(() => [
-    //         typeSelected,
-    //         setTypeSelected,
-    //     ])
-    //     const onSubmit = vi.fn()
-    //     const handleSubmit = vi.fn()
-    //     const submitFunction = vi.fn()
-    //     render(<FormHandler closeForm={closeForm} />)
-    //     const form = screen.getByRole('form')
-    //     expect(form).toBeDefined()
-    //     fireEvent.submit(form)
-    //     expect(onSubmit).toHaveBeenCalled()
-    // })
 })

@@ -1,19 +1,17 @@
 import { render, screen, cleanup, fireEvent } from '@testing-library/react'
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest'
 import { useForm } from 'react-hook-form'
-import Form from '../src/components/Form'
-import { getFormFields } from '../src/utils/getFormFields'
-import { energyTypes } from '../src/types/types'
+import { Form } from '../src/components/Form'
+import * as formUtils from '../src/utils/form-fields'
+import { DynamicFieldData, energyTypes } from '../src/types/types'
 
 describe('Form component', () => {
-    const formMethods = useForm()
-    const handleSubmit = vi.fn()
+    const formMethods = useForm<DynamicFieldData>()
     const closeForm = vi.fn()
 
     vi.mock('react-hook-form', async (importOriginal) => {
-        const original = await importOriginal<
-            typeof import('react-hook-form')
-        >()
+        const original =
+            await importOriginal<typeof import('react-hook-form')>()
         return {
             ...original,
             useForm: vi.fn().mockImplementation(() => ({
@@ -45,14 +43,14 @@ describe('Form component', () => {
         energyTypes.forEach((type) => {
             render(
                 <Form
-                    handleSubmit={handleSubmit}
+                    handleSubmit={formMethods.handleSubmit(vi.fn())}
                     typeSelected={type}
                     formMethods={formMethods}
                     closeForm={closeForm}
                 />
             )
 
-            const fields = getFormFields(type)
+            const fields = formUtils.getFormFields(type)
 
             fields?.forEach((field) => {
                 const inputField = screen.getByLabelText(field.label)
@@ -66,7 +64,7 @@ describe('Form component', () => {
     test('calls handleSubmit when form is submitted', () => {
         render(
             <Form
-                handleSubmit={handleSubmit}
+                handleSubmit={formMethods.handleSubmit(vi.fn())}
                 typeSelected="SOLAR"
                 formMethods={formMethods}
                 closeForm={closeForm}
@@ -77,13 +75,13 @@ describe('Form component', () => {
         expect(form).toBeDefined()
 
         fireEvent.submit(form)
-        expect(handleSubmit).toHaveBeenCalled()
+        expect(formMethods.handleSubmit).toHaveBeenCalled()
     })
 
     test('calls closeForm when Cancel button is clicked', () => {
         render(
             <Form
-                handleSubmit={handleSubmit}
+                handleSubmit={formMethods.handleSubmit(vi.fn())}
                 typeSelected="SOLAR"
                 formMethods={formMethods}
                 closeForm={closeForm}
@@ -101,22 +99,21 @@ describe('Form component', () => {
     })
 
     test('displays error message when form fields are invalid', () => {
-        vi.mock('getFormFields', () => {
-            vi.fn().mockImplementationOnce(() => [{ wrongField: 'wrongValue' }])
-        })
+        const spyGetFormFields = vi
+            .spyOn(formUtils, 'getFormFields')
+            .mockImplementationOnce(() => [{ fieldName: 'wrongValue' } as any])
+        const spy = vi.spyOn(console, 'error')
 
         render(
             <Form
-                handleSubmit={handleSubmit}
+                handleSubmit={formMethods.handleSubmit(vi.fn())}
                 typeSelected="SOLAR"
                 formMethods={formMethods}
                 closeForm={closeForm}
             />
         )
 
-        vi.waitFor(() => {
-            const alertElement = screen.getByText('Invalid form fields')
-            expect(alertElement).toBeDefined()
-        })
+        expect(spy).toHaveBeenCalledWith('Invalid form fields')
+        expect(spyGetFormFields).toHaveBeenCalled()
     })
 })

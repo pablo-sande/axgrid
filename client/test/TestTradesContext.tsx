@@ -5,7 +5,7 @@ import TradesContext, {
 } from '../src/contexts/TradesContextProvider'
 import { Trade } from '../src/types/types'
 import { hydroTrade, solarTrade, windTrade } from './__mocks__/trades'
-import Trades from '../src/components/Trades'
+import { Trades } from '../src/components/Trades'
 
 export const TestTradesContextComponent: React.FunctionComponent = () => {
     const [TradesState, TradesDispatch] = useReducer(
